@@ -1,0 +1,53 @@
+// hp815 
+int motorL = 9;       // left motor
+int motorR = 10;      // right motor
+int coilL = A0;       // left coil
+int coilR = A2;       // right coil
+
+int baseSpeed = 170; // forward speed
+float Kp = 1.5;      // steering strength
+int tolerance = 100;  // ignore small noise
+
+void setup() {
+  Serial.begin(9600);
+  
+  // setup motors
+  pinMode(motorL, OUTPUT);
+  pinMode(motorR, OUTPUT);
+  
+  // setup coils
+  pinMode(coilL, INPUT);
+  pinMode(coilR, INPUT);
+}
+
+void loop() {
+  // read coils
+  int leftSensor = analogRead(coilL);
+  int rightSensor = analogRead(coilR);
+
+  // get error
+  int error = leftSensor - rightSensor;
+
+  // ignore noise
+  if (abs(error) < tolerance) {
+    error = 0;
+  }
+
+  // calc adjustment
+  int adjustment = error * Kp;
+
+  // adjust speeds
+  int speedL = baseSpeed + adjustment;
+  int speedR = baseSpeed - adjustment;
+
+  // clamp pwm
+  speedL = constrain(speedL, 0, 255);
+  speedR = constrain(speedR, 0, 255);
+
+  // run motors
+  analogWrite(motorL, speedL);
+  analogWrite(motorR, speedR);
+
+  // loop delay
+  delay(10);
+}
