@@ -4,9 +4,9 @@ int motorR = 10;      // right motor
 int coilL = A0;       // left coil
 int coilR = A2;       // right coil
 
-int baseSpeed = 170; // forward speed
-float Kp = 1.5;      // steering strength
-int tolerance = 100;  // ignore small noise
+int baseSpeed = 170; 
+float Kp = 1.5;      
+int tolerance = 100;  
 
 void setup() {
   Serial.begin(9600);
